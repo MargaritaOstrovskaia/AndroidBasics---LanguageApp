@@ -1,7 +1,6 @@
 package com.ostrov.languageapp;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +16,10 @@ import java.util.ArrayList;
  * which is a list of {@link Word} objects.
  */
 public class WordAdapter extends ArrayAdapter<Word> {
-    private int color;
+
+    /** Resource ID for the background color for this list of words */
+    private int mColorResourceId;
+
     /**
      * This is our own custom constructor (it doesn't mirror a superclass constructor).
      * The context is used to inflate the layout file, and the list is the data we want
@@ -25,16 +27,17 @@ public class WordAdapter extends ArrayAdapter<Word> {
      *
      * @param context The current context. Used to inflate the layout file.
      * @param words A List of word objects to display in a list
-     * @param color view BackgroundColor
+     * @param colorResourceId view BackgroundColor
      */
-    WordAdapter(Context context, ArrayList<Word> words, int color) {
+    WordAdapter(Context context, ArrayList<Word> words, int colorResourceId) {
         // Here, we initialize the ArrayAdapter's internal storage for the context and the list.
         // The second argument is used when the ArrayAdapter is populating a single TextView.
         // Because this is a custom adapter for two TextViews and an ImageView,
         // the adapter is not going to use this second argument,
         // so it can be any value. Here, we used 0.
         super(context, 0, words);
-        this.color = color;
+
+        this.mColorResourceId = colorResourceId;
     }
 
 
@@ -47,14 +50,14 @@ public class WordAdapter extends ArrayAdapter<Word> {
      * @return The View for the position in the AdapterView.
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
         // Check if the existing view is being reused, otherwise inflate the view.
         View listItemView = convertView;
         if (listItemView == null)
             listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
 
         // Get the Word object located at this position in the list
-        Word item = getItem(position);
+        final Word item = getItem(position);
         if (item != null) {
             // Find the TextView in the list_item.xml layout with the ID version_name
             // Get the text (default word) from the current Word object
@@ -65,15 +68,22 @@ public class WordAdapter extends ArrayAdapter<Word> {
             TextView englishWord = listItemView.findViewById(R.id.english_text_view);
             englishWord.setText(item.getEnglishWord());
 
+            // Find the ImageView in the list_item.xml layout with the ID image.
             ImageView img = listItemView.findViewById(R.id.img);
+            // Check if an image is provided for this word or not
             if (item.hasImage()) {
+                // Make sure the view is visible
                 img.setVisibility(View.VISIBLE);
+                // If an image is available, display the provided image based on the resource ID
                 img.setImageResource(item.getImageResourceId());
             }
-            else
+            else {
+                // Otherwise hide the ImageView (set visibility to GONE)
                 img.setVisibility(View.GONE);
+            }
 
-            listItemView.findViewById(R.id.layout).setBackgroundColor(this.color);
+            // Set the background color of the text container View
+            listItemView.findViewById(R.id.layout).setBackgroundColor(this.mColorResourceId);
         }
 
         // Return the whole list item layout (containing 2 TextViews)

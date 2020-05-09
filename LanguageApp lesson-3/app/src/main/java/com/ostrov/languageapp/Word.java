@@ -7,6 +7,7 @@ class Word {
     private String mDefaultWord;
     private String mEnglishWord;
     private int mImageResourceId;
+    private int mSoundResourceId;
 
     /** Constant value that represents no image was provided for this word */
     private static final int NO_IMAGE_PROVIDED = -1;
@@ -15,10 +16,12 @@ class Word {
      * Create a new Word object.
      * @param defaultWord is the word in the Default language
      * @param englishWord is the word in the English language
+     * @param soundResourceId is sound resource id
      */
-    Word(String defaultWord, String englishWord) {
+    Word(String defaultWord, String englishWord, int soundResourceId) {
         this.mDefaultWord = defaultWord;
         this.mEnglishWord = englishWord;
+        this.mSoundResourceId = soundResourceId;
         this.mImageResourceId = NO_IMAGE_PROVIDED;
     }
 
@@ -26,12 +29,14 @@ class Word {
      * Create a new Word object.
      * @param defaultWord is the word in the Default language
      * @param englishWord is the word in the English language
-     * @param imageResourceId is image source code
+     * @param imageResourceId is image resource id
+     * @param soundResourceId is sound resource id
      */
-    Word(String defaultWord, String englishWord, int imageResourceId) {
+    Word(String defaultWord, String englishWord, int imageResourceId, int soundResourceId) {
         this.mDefaultWord = defaultWord;
         this.mEnglishWord = englishWord;
         this.mImageResourceId = imageResourceId;
+        this.mSoundResourceId = soundResourceId;
     }
 
     /**
@@ -56,9 +61,16 @@ class Word {
     }
 
     /**
+     * Get sound resource id
+     */
+    public int getSoundResourceId() {
+        return mSoundResourceId;
+    }
+
+    /**
      * Returns whether or not there is an image for this word.
      */
-    public boolean hasImage() {
+    boolean hasImage() {
         return mImageResourceId != NO_IMAGE_PROVIDED;
     }
 }
